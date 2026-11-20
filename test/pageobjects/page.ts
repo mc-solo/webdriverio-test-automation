@@ -1,12 +1,13 @@
 import { browser } from '@wdio/globals'
 
 /**
- * Base page for the-internet.herokuapp.com.
+ * Base page for the site under test.
  * Every page object extends this and only adds its own elements.
+ * The base URL comes from config/environments.ts, never from here.
  */
 export default class Page {
   /**
-   * Open a path relative to baseUrl (see wdio.conf.ts).
+   * Open a path relative to baseUrl (see config/environments.ts).
    */
   public open (path: string) {
     return browser.url(path)

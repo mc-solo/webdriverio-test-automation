@@ -1,25 +1,25 @@
+import { environments, chromeOptions } from './config/environments'
+
 export const config: WebdriverIO.Config = {
   runner: 'local',
 
   specs: ['./test/specs/**/*.ts'],
   exclude: [],
 
-  maxInstances: 1,
+  maxInstances: environments.maxInstances,
   capabilities: [
     {
-      browserName: 'chrome',
-      'goog:chromeOptions': {
-        args: ['--headless=new', '--disable-gpu', '--no-sandbox', '--window-size=1280,800']
-      }
+      browserName: environments.browserName,
+      'goog:chromeOptions': chromeOptions()
     }
   ],
 
-  logLevel: 'info',
+  logLevel: environments.logLevel,
   bail: 0,
-  baseUrl: 'https://the-internet.herokuapp.com',
-  waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
-  connectionRetryCount: 3,
+  baseUrl: environments.baseUrl,
+  waitforTimeout: environments.waitforTimeout,
+  connectionRetryTimeout: environments.connectionRetryTimeout,
+  connectionRetryCount: environments.connectionRetryCount,
 
   // No driver service needed: WebdriverIO 8.14+ / 9 downloads and manages
   // ChromeDriver automatically for the installed Chrome version.
@@ -37,6 +37,6 @@ export const config: WebdriverIO.Config = {
   ],
   mochaOpts: {
     ui: 'bdd',
-    timeout: 60000
+    timeout: environments.mochaTimeout
   }
 }

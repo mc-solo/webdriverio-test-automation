@@ -1,0 +1,32 @@
+import Page from './page'
+
+/**
+ * Login page: /login
+ * Credentials live in test-data/login.json (the demo account shown on
+ * the page itself). Never hard-code credentials in a spec or page object.
+ */
+class LoginPage extends Page {
+  public get inputUsername () {
+    return $('#username')
+  }
+
+  public get inputPassword () {
+    return $('#password')
+  }
+
+  public get btnSubmit () {
+    return $('button[type="submit"]')
+  }
+
+  public async login (username: string, password: string) {
+    await this.inputUsername.setValue(username)
+    await this.inputPassword.setValue(password)
+    await this.btnSubmit.click()
+  }
+
+  public open () {
+    return super.open('/login')
+  }
+}
+
+export default new LoginPage()
