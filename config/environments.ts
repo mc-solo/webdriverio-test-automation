@@ -48,6 +48,11 @@ export const environments = {
   baseUrl:
     process.env.BASE_URL ?? 'https://the-internet.herokuapp.com',
 
+  /** API under test for the combined API + UI spec. Default is the
+   *  public JSONPlaceholder demo API. Override with API_BASE_URL. */
+  apiBaseUrl:
+    process.env.API_BASE_URL ?? 'https://jsonplaceholder.typicode.com',
+
   /** Browser to run against (chrome is the only one configured). */
   browserName: process.env.BROWSER ?? 'chrome',
 

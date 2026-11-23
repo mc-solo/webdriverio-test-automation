@@ -18,8 +18,9 @@ Config lives in `config/environments.ts` (base URL, timeouts, browser, env overr
 | `test/specs/login.spec.ts` (4 tests) | Valid login reaches the secure area; wrong password and wrong username show errors; logout returns to the login page |
 | `test/specs/checkbox.spec.ts` (3 tests) | Both checkboxes shown with their starting state; clicking checks the first and unchecks the second |
 | `test/specs/dropdown.spec.ts` (3 tests) | Dropdown shown with placeholder selected; selecting Option 1 and Option 2 |
+| `test/specs/api-ui.spec.ts` (3 tests) | Combined API + UI: API call against JSONPlaceholder, then the matching UI flow (login, dropdown, login + logout) |
 
-10 tests total. Demo login used by the tests (shown on the site itself, stored in `test-data/login.json`): `tomsmith` / `SuperSecretPassword!` — dummy test credentials only.
+13 tests total. Demo login used by the tests (shown on the site itself, stored in `test-data/login.json`): `tomsmith` / `SuperSecretPassword!` — dummy test credentials only.
 
 ## Install
 
@@ -70,6 +71,7 @@ test-data/
   login.json                 # valid/invalid credentials, expected messages, pages
   checkboxes.json            # expected checkbox count and initial states
   dropdown.json              # dropdown options and placeholder value
+  api-ui.json                # API post id, expected user, new-post payload, dropdown option
 test/
   pageobjects/
     page.ts                  # base page: open(), flash banner, heading
@@ -81,6 +83,7 @@ test/
     login.spec.ts
     checkbox.spec.ts
     dropdown.spec.ts
+    api-ui.spec.ts           # combined API + UI flow
 docs/
   SETUP.md                   # install + configuration
   TESTING.md                 # what is tested, how to run, reports
