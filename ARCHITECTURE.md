@@ -1,5 +1,18 @@
 # Architecture
 
+## Diagram
+
+```mermaid
+flowchart LR
+    ENV[.env] --> CFG[config/]
+    CFG --> WD[wdio.conf.ts]
+    TD[test-data/] --> SPEC[test/specs/]
+    WD --> SPEC
+    SPEC --> PO[test/pageobjects/]
+    PO --> UI[demo web app]
+    SPEC --> API[demo API]
+```
+
 WebdriverIO 9 + TypeScript + Mocha end-to-end tests for
 [the-internet.herokuapp.com](https://the-internet.herokuapp.com), using the
 Page Object Model. One rule drives the layout: **no hard-coded runtime
@@ -16,18 +29,22 @@ webdriverio-test-automation/
 ├── test-data/
 │   ├── login.json            # valid/invalid credentials, expected messages, pages
 │   ├── checkboxes.json       # expected checkbox count and initial states
-│   └── dropdown.json         # dropdown options and placeholder value
+│   ├── dropdown.json         # dropdown options and placeholder value
+│   └── search.json           # home search terms + expected matches, table filter values + expected rows
 ├── test/
 │   ├── pageobjects/          # one class per page, selectors + actions only
 │   │   ├── page.ts           # base page: open(), flash banner, heading
 │   │   ├── login.page.ts     # /login
 │   │   ├── secure.page.ts    # /secure
 │   │   ├── checkbox.page.ts  # /checkboxes
-│   │   └── dropdown.page.ts  # /dropdown
+│   │   ├── dropdown.page.ts  # /dropdown
+│   │   ├── home.page.ts      # / (example list search, open a found example)
+│   │   └── tables.page.ts    # /tables (filter Example 1 rows by column value)
 │   └── specs/                # one spec file per page, assertions only
 │       ├── login.spec.ts
 │       ├── checkbox.spec.ts
-│       └── dropdown.spec.ts
+│       ├── dropdown.spec.ts
+│       └── search.spec.ts
 ├── docs/
 │   ├── SETUP.md              # install + configuration
 │   └── TESTING.md            # what is tested, how to run, reports
@@ -66,7 +83,9 @@ test-data/*.json ──► test/specs/*.ts ──┤
                                   (selectors, actions, routes)
                                       │
                                       ▼
-                              browser (headless Chrome)
+                              browser (headless Chrome by default,
+                              Firefox with BROWSER=firefox, both with
+                              BROWSERS=chrome,firefox)
 ```
 
 1. `config/environments.ts` resolves the runtime settings and hands

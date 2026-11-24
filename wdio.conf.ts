@@ -1,4 +1,4 @@
-import { environments, chromeOptions } from './config/environments'
+import { environments, chromeOptions, firefoxOptions } from './config/environments'
 
 export const config: WebdriverIO.Config = {
   runner: 'local',
@@ -7,12 +7,19 @@ export const config: WebdriverIO.Config = {
   exclude: [],
 
   maxInstances: environments.maxInstances,
-  capabilities: [
-    {
-      browserName: environments.browserName,
-      'goog:chromeOptions': chromeOptions()
-    }
-  ],
+  // One capability per browser in environments.browsers (default: Chrome
+  // only). Set BROWSER=firefox or BROWSERS=chrome,firefox to change it.
+  capabilities: environments.browsers.map((browserName) =>
+    browserName === 'firefox'
+      ? {
+          browserName,
+          'moz:firefoxOptions': firefoxOptions()
+        }
+      : {
+          browserName,
+          'goog:chromeOptions': chromeOptions()
+        }
+  ),
 
   logLevel: environments.logLevel,
   bail: 0,
@@ -22,7 +29,8 @@ export const config: WebdriverIO.Config = {
   connectionRetryCount: environments.connectionRetryCount,
 
   // No driver service needed: WebdriverIO 8.14+ / 9 downloads and manages
-  // ChromeDriver automatically for the installed Chrome version.
+  // ChromeDriver and GeckoDriver automatically for the installed browser
+  // version.
   // (The old @wdio/selenium-standalone-service is deprecated and has no v9 release.)
   services: [],
 

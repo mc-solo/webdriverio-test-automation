@@ -7,6 +7,8 @@
 - Google Chrome — required only to run the browser tests, not to install
   or type-check the project. WebdriverIO downloads the matching
   ChromeDriver for you; no separate driver service is configured.
+  To run on Firefox instead, install Mozilla Firefox — WebdriverIO
+  downloads the matching GeckoDriver the same way.
 
 ## Install
 
@@ -26,7 +28,8 @@ cp .env.example .env
 | Variable | Default | What it does |
 |---|---|---|
 | `BASE_URL` | `https://the-internet.herokuapp.com` | Site under test |
-| `BROWSER` | `chrome` | Browser to run against |
+| `BROWSER` | `chrome` | Browser to run against: `chrome` or `firefox` |
+| `BROWSERS` | _(unset)_ | Comma-separated browsers to run against, e.g. `chrome,firefox`; overrides `BROWSER` when set |
 | `HEADLESS` | `true` | `false` to watch the browser (`npm run test:headed`) |
 | `WINDOW_SIZE` | `1280,800` | Browser window size in headless mode |
 | `WAITFOR_TIMEOUT` | `10000` | Element wait timeout, ms |

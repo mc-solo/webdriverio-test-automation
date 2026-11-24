@@ -43,6 +43,29 @@ function envBool (name: string, fallback: boolean): boolean {
   return ['1', 'true', 'yes'].includes(raw.toLowerCase())
 }
 
+/** Browsers this project can run against. Chrome is the default. */
+export const supportedBrowsers = ['chrome', 'firefox'] as const
+export type SupportedBrowser = (typeof supportedBrowsers)[number]
+
+function isSupportedBrowser (name: string): name is SupportedBrowser {
+  return (supportedBrowsers as readonly string[]).includes(name)
+}
+
+/**
+ * Browsers to run against, in order. Set BROWSERS to a comma-separated
+ * list (e.g. BROWSERS=chrome,firefox) to run the suite on several
+ * browsers; a single BROWSER value is the same as a one-item list.
+ * Unknown names are ignored; when none is valid, Chrome is used.
+ */
+function envBrowsers (): SupportedBrowser[] {
+  const raw = process.env.BROWSERS ?? process.env.BROWSER ?? 'chrome'
+  const names = raw.split(',').map((name) => name.trim().toLowerCase()).filter(Boolean)
+  const valid = names.filter(isSupportedBrowser)
+  return valid.length > 0 ? valid : ['chrome']
+}
+
+const browsers = envBrowsers()
+
 export const environments = {
   /** Site under test. Default is the public demo site. */
   baseUrl:
@@ -53,8 +76,12 @@ export const environments = {
   apiBaseUrl:
     process.env.API_BASE_URL ?? 'https://jsonplaceholder.typicode.com',
 
-  /** Browser to run against (chrome is the only one configured). */
-  browserName: process.env.BROWSER ?? 'chrome',
+  /** Browser to run against. First entry of `browsers` below;
+   *  override with BROWSER=firefox (or BROWSERS=chrome,firefox). */
+  browserName: browsers[0],
+
+  /** Browsers to run against, in order (see envBrowsers above). */
+  browsers,
 
   /** Headless mode. Set HEADLESS=false to watch the browser. */
   headless: envBool('HEADLESS', true),
@@ -82,5 +109,13 @@ export const environments = {
 export function chromeOptions (): { args: string[] } {
   const args = ['--disable-gpu', '--no-sandbox', `--window-size=${environments.windowSize}`]
   if (environments.headless) args.unshift('--headless=new')
+  return { args }
+}
+
+/** Firefox arguments, derived from the settings above. Mirrors chromeOptions. */
+export function firefoxOptions (): { args: string[] } {
+  const [width, height] = environments.windowSize.split(',')
+  const args = [`--width=${width}`, `--height=${height}`]
+  if (environments.headless) args.unshift('-headless')
   return { args }
 }
